@@ -7,7 +7,7 @@ function getFile() {
   app.get('/music/getMusic', (req, res) => {
     console.log('req - query:', req.query);
     const { music } = req.query;
-    const stream = fs.readFileSync(musicDir);
+    const stream = fs.readFileSync(musicDir + music);
     res.send(stream);
   });
   app.get('/music/getStock', (req, res) => {

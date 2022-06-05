@@ -2,6 +2,7 @@ const mongoose = require('../db/db');
 const schema = {
   userName: String,
   passWord: String,
+  donetest: Array,
 };
 const UserSchema = mongoose.Schema(schema);
 
