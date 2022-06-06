@@ -9,22 +9,17 @@ function treeHole() {
     res.send(result);
   });
   app.post(`/${baseRoute}/setTreeHole`, (req, res) => {
-    // const treeHoleInfo = {
-    //   userName: 'caijing',
-    //   backgroundImage: '',
-    //   content: '这是一条测试的树洞哦～',
-    //   publishTime: +new Date(),
-    // }
-    // const newTreeHole = new TreeHoleModel(treeHoleInfo);
-    // newTreeHole.save(err => {
-    //   if (err) {
-    //     return res.send({ code: 500 });
-    //   }
-    //   res.send({ code: 200 });
-    //   console.log('存下来了')
-    // })
-    res.send('111')
-  })
+    const { submitText } = req.body;
+    const treeHoleInfo = {
+      userName: 'caijing',
+      backgroundImage: '',
+      content: submitText,
+      publishTime: +new Date(),
+    }
+    const newTreeHole = new TreeHoleModel(treeHoleInfo);
+    newTreeHole.save()
+    res.send('111');
+  });
 }
 
 module.exports = treeHole;
