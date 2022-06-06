@@ -28,21 +28,7 @@ function receiveFile() {
       });
     });
   });
-  // app.post('/file/music', (req, res) => {
-  //   const form = new multiparty.Form();
-  //   form.encoding = 'utf-8';
-  //   form.uploadDir = __dirname + '/save/music';
-  //   // 进行解析
-  //   form.parse(req, (error, fields, files) => {
-  //     const savedMusic = files.file[0];
-  //     const { path } = savedMusic;
-  //     const music = getBase64(path);
-  //   });
-
-  //   res.send({
-  //     code: 200
-  //   });
-  // });
+  
 }
 
 module.exports = receiveFile;

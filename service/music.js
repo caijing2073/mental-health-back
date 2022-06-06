@@ -1,7 +1,9 @@
 const fs = require('fs');
 const { createReadStream } = fs;
 const { createModel } = require('mongoose-gridfs');
+const multiparty = require('multiparty');
 const app = require('../app');
+const MusicModel = require('../model/Music');
 const musicDir = __dirname + '/save/music/';
 function getFile() {
   app.get('/music/getMusic', (req, res) => {
@@ -20,6 +22,30 @@ function getFile() {
     } catch (err) { }
     res.send('7777');
   });
+
+  // 上传音乐
+  app.post('/music/upload', (req, res) => {
+    const form = new multiparty.Form();
+    form.encoding = 'utf-8';
+    const saveUrl = '/save/music';
+    form.uploadDir = __dirname + saveUrl;
+    // 进行解析
+    form.parse(req, (error, fields, files) => {
+      console.log('files:', files);
+      const savedMusic = files.file[0];
+      const { path } = savedMusic;
+      const music = getBase64(path);
+    });
+    res.send({
+      code: 200
+    });
+  });
+
+  app.post('/music/setMusicInfo', (req, res) => {
+    const { musicInfo } = req.body;
+    
+  });
+
   app.post('/music/getMusicList', (req, res) => {
     const { emotion } = req.body;
     const sadMusicList = ['五音Jw,银临-生死劫.flac'];
