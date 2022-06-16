@@ -4,7 +4,6 @@ const TipModel = require('../model/Tip');
 function tip() {
   app.get('/tip/getInfo', async (req, res) => {
     const tipRes = await TipModel.find();
-    console.log('tipRes:', tipRes);
     res.send({
       tip: tipRes,
     });

@@ -1,6 +1,4 @@
 const fs = require('fs');
-const { createReadStream } = fs;
-const { createModel } = require('mongoose-gridfs');
 const multiparty = require('multiparty');
 const app = require('../app');
 const MusicModel = require('../model/Music');
@@ -41,9 +39,53 @@ function getFile() {
     });
   });
 
-  app.post('/music/setMusicInfo', (req, res) => {
-    const { musicInfo } = req.body;
-    
+  app.post('/music/editMusicInfo', (req, res) => {
+    const form = new multiparty.Form();
+    form.encoding = 'utf-8';
+    form.uploadDir = __dirname + '/save/icon';
+    // 进行解析
+    form.on('part', (part) => {
+      console.log('part:', part);
+    });
+    form.parse(req, async (error, fields, files) => {
+      const savedImage = files.file[0];
+      const { path } = savedImage;
+      const fullPath = path.split('/');
+      const imagePrev = 'data:image/png;base64,';
+      const imageFullCode = imagePrev + getBase64(path);
+      const fileInfo = fields;
+      const tag = fileInfo.tag[0];
+      const type = fileInfo?.type[0] || '';
+      const updateInfo = {
+        tag,
+      };
+      if (type) {
+        updateInfo.icon = imageFullCode;
+      } else {
+        updateInfo.music = getBase64(path);
+      }
+      MusicModel.updateOne({ tag }, updateInfo, (err, doc) => {
+        if (err) {
+          console.log('err', err);
+        } else {
+          console.log(doc);
+        }
+      });
+      if (type) {
+        updateInfo.icon = imageFullCode;
+        res.send({
+          type,
+          imageFullCode,
+        });
+      } else {
+        updateInfo.music = getBase64(path);
+        res.send({
+          type,
+          musicInfo: files,
+        });
+      }
+    });
+
   });
 
   app.post('/music/getMusicList', (req, res) => {
